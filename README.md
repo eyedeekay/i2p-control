@@ -9,6 +9,7 @@ terminal i2pcontrol client.
         -path default:"jsonrpc"
         -password default:"itoopie"
         -method default:"echo"
+        -block default:false
 
 Installation with go get
 
@@ -23,3 +24,9 @@ The methods that have been implemented are
         graceful-shutdown : i2pcontrol:ShutdownGraceful
         update            : i2pcontrol:Update
         find-update       : i2pcontrol:FindUpdate
+
+So, for instance, to initiate a graceful shutdown and block until the router is
+shut down, use the command:
+
+        i2p-control -block -method=graceful-shutdown
+

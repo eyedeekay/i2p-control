@@ -19,6 +19,7 @@ terminal i2pcontrol client.
         -path default:"jsonrpc"
         -password default:"itoopie"
         -method default:"echo"
+        -block default:false
 
 Installation with go get
 
@@ -33,6 +34,12 @@ The methods that have been implemented are
         graceful-shutdown : i2pcontrol:ShutdownGraceful
         update            : i2pcontrol:Update
         find-update       : i2pcontrol:FindUpdate
+
+So, for instance, to initiate a graceful shutdown and block until the router is
+shut down, use the command:
+
+        i2p-control -block -method=graceful-shutdown
+
 `
 
 var (
@@ -43,6 +50,7 @@ var (
 	command  = flag.String("method", "echo", "Method call to invoke")
 	shelp    = flag.Bool("h", false, "Show the help message")
 	lhelp    = flag.Bool("help", false, "Show the help message")
+	block    = flag.Bool("block", false, "Block the terminal until the router is completely shut down")
 )
 
 func main() {
@@ -111,5 +119,15 @@ func main() {
 			return
 		}
 		log.Println("You don't need an update")
+	}
+
+	for *block {
+		participatingTunnels, err := i2pcontrol.ParticipatingTunnels()
+		if err != nil {
+			log.Fatal(err)
+		}
+		if participatingTunnels < 1 {
+			*block = false
+		}
 	}
 }
