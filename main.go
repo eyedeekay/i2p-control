@@ -6,6 +6,7 @@ import (
 	"github.com/eyedeekay/go-i2pcontrol"
 	"log"
 	"strings"
+	"time"
 )
 
 var usage = `i2p-control
@@ -129,5 +130,6 @@ func main() {
 		if participatingTunnels < 1 {
 			*block = false
 		}
+		time.Sleep(time.Second)
 	}
 }
