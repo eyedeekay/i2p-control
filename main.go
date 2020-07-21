@@ -50,6 +50,8 @@ var (
 	password = flag.String("password", "itoopie", "Password for the i2pcontrol interface")
 	command  = flag.String("method", "echo", "Method call to invoke")
 	shelp    = flag.Bool("h", false, "Show the help message")
+	sverbose = flag.Bool("v", false, "Verbosely update participating tunnel count while running.")
+	lverbose = flag.Bool("verbose", false, "Verbosely update participating tunnel count while running.")
 	lhelp    = flag.Bool("help", false, "Show the help message")
 	block    = flag.Bool("block", false, "Block the terminal until the router is completely shut down")
 )
@@ -64,6 +66,13 @@ func main() {
 	_, err := i2pcontrol.Authenticate("itoopie")
 	if err != nil {
 		log.Fatal(err)
+	}
+	verbose := false
+	if *sverbose {
+		verbose = true
+	}
+	if *lverbose {
+		verbose = true
 	}
 	switch *command {
 	case "echo":
@@ -123,13 +132,16 @@ func main() {
 	}
 
 	for *block {
-		participatingTunnels, err := i2pcontrol.ParticipatingTunnels()
-		if err != nil {
-			log.Fatal(err)
+		if verbose {
+			participatingTunnels, err := i2pcontrol.ParticipatingTunnels()
+			if err != nil {
+				log.Fatal(err)
+			}
+			if participatingTunnels < 1 {
+				*block = false
+			}
+			log.Println("Waiting for expiration of:", participatingTunnels)
+			time.Sleep(time.Duration(time.Second * 3))
 		}
-		if participatingTunnels < 1 {
-			*block = false
-		}
-		time.Sleep(time.Second)
 	}
 }
