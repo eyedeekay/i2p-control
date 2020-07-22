@@ -62,7 +62,7 @@ func main() {
 		fmt.Printf(usage)
 		return
 	}
-	i2pcontrol.Initialize("localhost", "7657", "jsonrpc")
+	i2pcontrol.Initialize(*host, *port, "jsonrpc")
 	_, err := i2pcontrol.Authenticate("itoopie")
 	if err != nil {
 		log.Fatal(err)
