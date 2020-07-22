@@ -46,7 +46,7 @@ shut down, use the command:
 var (
 	host     = flag.String("host", "localhost", "Host of the i2pcontrol interface")
 	port     = flag.String("port", "7657", "Port of the i2pcontrol interface")
-	path     = flag.String("path", "jsonrpc", "Path to the i2pcontrol interface")
+	path     = flag.String("path", "", "Path to the i2pcontrol interface")
 	password = flag.String("password", "itoopie", "Password for the i2pcontrol interface")
 	command  = flag.String("method", "echo", "Method call to invoke")
 	shelp    = flag.Bool("h", false, "Show the help message")
@@ -62,8 +62,8 @@ func main() {
 		fmt.Printf(usage)
 		return
 	}
-	i2pcontrol.Initialize(*host, *port, "jsonrpc")
-	_, err := i2pcontrol.Authenticate("itoopie")
+	i2pcontrol.Initialize(*host, *port, *path)
+	_, err := i2pcontrol.Authenticate(*password)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -139,8 +139,9 @@ func main() {
 			}
 			if participatingTunnels < 1 {
 				*block = false
+				break
 			}
-			log.Println("Waiting for expiration of:", participatingTunnels)
+			log.Println("Waiting for expiration of:", participatingTunnels, "participating tunnels.")
 			time.Sleep(time.Duration(time.Second * 3))
 		}
 	}
