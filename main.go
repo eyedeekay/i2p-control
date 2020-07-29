@@ -21,6 +21,7 @@ terminal i2pcontrol client.
         -password default:"itoopie"
         -method default:"echo"
         -block default:false
+        -verbose default:false
 
 Installation with go get
 
@@ -46,7 +47,7 @@ shut down, use the command:
 var (
 	host     = flag.String("host", "localhost", "Host of the i2pcontrol interface")
 	port     = flag.String("port", "7657", "Port of the i2pcontrol interface")
-	path     = flag.String("path", "", "Path to the i2pcontrol interface")
+	path     = flag.String("path", "jsonrpc", "Path to the i2pcontrol interface")
 	password = flag.String("password", "itoopie", "Password for the i2pcontrol interface")
 	command  = flag.String("method", "echo", "Method call to invoke")
 	shelp    = flag.Bool("h", false, "Show the help message")
@@ -73,6 +74,9 @@ func main() {
 	}
 	if *lverbose {
 		verbose = true
+	}
+	if verbose {
+		log.Println(*command)
 	}
 	switch *command {
 	case "echo":
@@ -130,19 +134,23 @@ func main() {
 		}
 		log.Println("You don't need an update")
 	}
-
+	lastParticipatingTunnels, err := i2pcontrol.ParticipatingTunnels()
+	if err != nil {
+		log.Fatal(err)
+	}
 	for *block {
-		if verbose {
-			participatingTunnels, err := i2pcontrol.ParticipatingTunnels()
-			if err != nil {
-				log.Fatal(err)
-			}
-			if participatingTunnels < 1 {
-				*block = false
-				break
-			}
+		participatingTunnels, err := i2pcontrol.ParticipatingTunnels()
+		if err != nil {
+			log.Fatal(err)
+		}
+		if participatingTunnels != lastParticipatingTunnels {
 			log.Println("Waiting for expiration of:", participatingTunnels, "participating tunnels.")
-			time.Sleep(time.Duration(time.Second * 3))
+			lastParticipatingTunnels = participatingTunnels
+		}
+		time.Sleep(time.Duration(time.Second * 1))
+		if participatingTunnels < 1 {
+			*block = false
+			break
 		}
 	}
 }

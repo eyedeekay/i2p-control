@@ -1,6 +1,6 @@
 
 USER_GH=eyedeekay
-VERSION=0.1.01
+VERSION=0.1.02
 packagename=i2p-control
 
 echo:
