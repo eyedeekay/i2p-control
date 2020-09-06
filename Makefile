@@ -30,9 +30,9 @@ osx: fmt
 linux: fmt
 	GOOS=linux go build $(GO_COMPILER_OPTS) -o $(packagename)
 
-sumwindows=`sha256sum $(packagename)-variant.exe`
-sumlinux=`sha256sum $(packagename)-variant`
-sumdarwin=`sha256sum $(packagename)-variant-darwin`
+sumwindows=`sha256sum $(packagename).exe`
+sumlinux=`sha256sum $(packagename)`
+sumdarwin=`sha256sum $(packagename)-darwin`
 
 upload-windows:
 	gothub upload -R -u eyedeekay -r "$(packagename)" -t $(LAUNCH_VERSION) -l "$(sumwindows)" -n "$(packagename).exe" -f "$(packagename).exe"
