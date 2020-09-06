@@ -1,7 +1,7 @@
 
 USER_GH=eyedeekay
 VERSION=0.1.04
-packagename=$(packagename)
+packagename=i2p-control
 
 GO_COMPILER_OPTS = -a -tags netgo -ldflags '-w -extldflags "-static"'
 
