@@ -30,6 +30,9 @@ Installation with go get
 The methods that have been implemented are
 
         echo              : i2pcontrol:Echo
+        stat              : i2pcontrol:RouterInfo:i2p.router.status
+        netstat           : i2pcontrol:RouterInfo:i2p.router.net.router.status
+        tunstat           : i2pcontrol:RouterInfo:i2p.router.net.tunnels.participating
         restart           : i2pcontrol:Restart
         graceful-restart  : i2pcontrol:RestartGraceful
         shutdown          : i2pcontrol:Shutdown
@@ -63,6 +66,7 @@ func main() {
 		fmt.Printf(usage)
 		return
 	}
+	shuttingdown := false
 	i2pcontrol.Initialize(*host, *port, *path)
 	_, err := i2pcontrol.Authenticate(*password)
 	if err != nil {
@@ -91,24 +95,28 @@ func main() {
 			log.Fatal(err)
 		}
 		log.Println(message)
+		shuttingdown = true
 	case "graceful-restart":
 		message, err := i2pcontrol.RestartGraceful()
 		if err != nil {
 			log.Fatal(err)
 		}
 		log.Println(message)
+		shuttingdown = true
 	case "shutdown":
 		message, err := i2pcontrol.Shutdown()
 		if err != nil {
 			log.Fatal(err)
 		}
 		log.Println(message)
+		shuttingdown = true
 	case "graceful-shutdown":
 		message, err := i2pcontrol.ShutdownGraceful()
 		if err != nil {
 			log.Fatal(err)
 		}
 		log.Println(message)
+		shuttingdown = true
 	case "update":
 		message, err := i2pcontrol.FindUpdates()
 		if err != nil {
@@ -133,24 +141,54 @@ func main() {
 			return
 		}
 		log.Println("You don't need an update")
-	}
-	lastParticipatingTunnels, err := i2pcontrol.ParticipatingTunnels()
-	if err != nil {
-		log.Fatal(err)
-	}
-	for *block {
-		participatingTunnels, err := i2pcontrol.ParticipatingTunnels()
+	case "stat":
+		message, err := i2pcontrol.Status()
 		if err != nil {
 			log.Fatal(err)
 		}
-		if participatingTunnels != lastParticipatingTunnels {
-			log.Println("Waiting for expiration of:", participatingTunnels, "participating tunnels.")
-			lastParticipatingTunnels = participatingTunnels
+		log.Println(message)
+	case "netstat":
+		message, err := i2pcontrol.NetStatus()
+		if err != nil {
+			log.Fatal(err)
 		}
-		time.Sleep(time.Duration(time.Second * 1))
-		if participatingTunnels < 1 {
-			*block = false
-			break
+		log.Println(message)
+	case "reseedstat":
+		message, err := i2pcontrol.Reseeding()
+		if err != nil {
+			log.Fatal(err)
+		}
+		if message {
+			log.Println("Router is reseeding")
+		} else {
+			log.Println("Router is not reseeding")
+		}
+	case "tunstat":
+		message, err := i2pcontrol.ParticipatingTunnels()
+		if err != nil {
+			log.Fatal(err)
+		}
+		log.Println(message)
+	}
+	if shuttingdown {
+		lastParticipatingTunnels, err := i2pcontrol.ParticipatingTunnels()
+		if err != nil {
+			log.Fatal(err)
+		}
+		for *block {
+			participatingTunnels, err := i2pcontrol.ParticipatingTunnels()
+			if err != nil {
+				log.Fatal(err)
+			}
+			if participatingTunnels != lastParticipatingTunnels {
+				log.Println("Waiting for expiration of:", participatingTunnels, "participating tunnels.")
+				lastParticipatingTunnels = participatingTunnels
+			}
+			time.Sleep(time.Duration(time.Second * 1))
+			if participatingTunnels < 1 {
+				*block = false
+				break
+			}
 		}
 	}
 }

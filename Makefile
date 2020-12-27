@@ -21,6 +21,8 @@ tar:
 		--exclude examples \
 		-cJvf ../$(packagename)_$(VERSION).orig.tar.xz .
 
+all: windows osx linux
+
 windows: fmt
 	GOOS=windows go build $(GO_COMPILER_OPTS) -o $(packagename).exe
 
@@ -35,13 +37,13 @@ sumlinux=`sha256sum $(packagename)`
 sumdarwin=`sha256sum $(packagename)-darwin`
 
 upload-windows:
-	gothub upload -R -u eyedeekay -r "$(packagename)" -t $(LAUNCH_VERSION) -l "$(sumwindows)" -n "$(packagename).exe" -f "$(packagename).exe"
+	gothub upload -R -u eyedeekay -r "$(packagename)" -t v$(VERSION) -l "$(sumwindows)" -n "$(packagename).exe" -f "$(packagename).exe"
 
 upload-darwin:
-	gothub upload -R -u eyedeekay -r "$(packagename)" -t $(LAUNCH_VERSION) -l "$(sumdarwin)" -n "$(packagename)-darwin" -f "$(packagename)-darwin"
+	gothub upload -R -u eyedeekay -r "$(packagename)" -t v$(VERSION) -l "$(sumdarwin)" -n "$(packagename)-darwin" -f "$(packagename)-darwin"
 
 upload-linux:
-	gothub upload -R -u eyedeekay -r "$(packagename)" -t $(LAUNCH_VERSION) -l "$(sumlinux)" -n "$(packagename)" -f "$(packagename)"
+	gothub upload -R -u eyedeekay -r "$(packagename)" -t v$(VERSION) -l "$(sumlinux)" -n "$(packagename)" -f "$(packagename)"
 
 upload: upload-windows upload-darwin upload-linux
 
