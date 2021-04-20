@@ -83,6 +83,8 @@ func main() {
 		log.Println(*command)
 	}
 	minutes := time.Duration(time.Minute * 11)
+	baseminutes := time.Duration(time.Minute * 11)
+	oldtime := time.Now()
 	switch *command {
 	case "echo":
 		message, err := i2pcontrol.Echo(strings.Join(flag.Args(), " "))
@@ -177,19 +179,19 @@ func main() {
 			log.Fatal(err)
 		}
 		if lastParticipatingTunnels != 0 {
-			log.Println("Waiting for expiration of:", lastParticipatingTunnels, "participating tunnels in", minutes)
+			log.Println("Waiting for expiration of:", lastParticipatingTunnels, "participating tunnels in", baseminutes+minutes)
 		}
 		for *block {
+			minutes = oldtime.Sub(time.Now())
 			participatingTunnels, err := i2pcontrol.ParticipatingTunnels()
 			if err != nil {
 				log.Fatal(err)
 			}
 			if participatingTunnels != lastParticipatingTunnels {
-				log.Println("Waiting for expiration of:", participatingTunnels, "participating tunnels in", minutes)
+				log.Println("Waiting for expiration of:", participatingTunnels, "participating tunnels in", baseminutes+minutes)
 				lastParticipatingTunnels = participatingTunnels
 			}
 			time.Sleep(time.Duration(time.Second * 1))
-			minutes = minutes - time.Duration(time.Second*1)
 			if participatingTunnels < 1 {
 				*block = false
 				break
