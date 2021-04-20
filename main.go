@@ -179,7 +179,7 @@ func main() {
 			log.Fatal(err)
 		}
 		if lastParticipatingTunnels != 0 {
-			log.Println("Waiting for expiration of:", lastParticipatingTunnels, "participating tunnels in", baseminutes+minutes)
+			log.Println("Waiting for expiration of:", lastParticipatingTunnels, "participating tunnels in", baseminutes)
 		}
 		for *block {
 			minutes = oldtime.Sub(time.Now())
