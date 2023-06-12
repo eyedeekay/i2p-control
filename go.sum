@@ -1,5 +1,8 @@
+github.com/766b/go-outliner v0.0.0-20180511142203-fc6edecdadd7/go.mod h1:1SzhThoS5lcKfE4IFOLQJ04WCmFpaAiPe8H9yqXyYSU=
 github.com/eyedeekay/go-i2pcontrol v0.1.4 h1:V378UckxQ8a1RLKhyOvLEv8Q8NZIfwTWkbUdUT+OxlA=
 github.com/eyedeekay/go-i2pcontrol v0.1.4/go.mod h1:WvJ7U6O5fZzGeZVvx/Voaqkrzci4isPoeVVqwndUJcg=
+github.com/eyedeekay/go-i2pcontrol v0.1.5 h1:li/qxhAL897ERXaXhoMGoqk9R8UsmDjC6LuQ8jokc1U=
+github.com/eyedeekay/go-i2pcontrol v0.1.5/go.mod h1:6mmy1b7T6V6c15O3P0cuBYhEKSLxfq1V2GW70RTJntA=
 github.com/fsnotify/fsnotify v1.4.7/go.mod h1:jwhsz4b93w/PPRr/qN1Yymfu8t87LnFCMoQvtojpjFo=
 github.com/golang/protobuf v1.2.0/go.mod h1:6lQm79b+lXiMfvg/cZm0SGofjICqVBUtrP5yJMmIC1U=
 github.com/hpcloud/tail v1.0.0/go.mod h1:ab1qPbhIpdTxEkNHXyeSf5vhxWSCs/tWer42PpOxQnU=
@@ -8,6 +11,8 @@ github.com/onsi/gomega v1.5.0 h1:izbySO9zDPmjJ8rDjLvkA2zJHIo+HkYXHnf7eN7SSyo=
 github.com/onsi/gomega v1.5.0/go.mod h1:ex+gbHU/CVuBBDIJjb2X0qEXbFg53c61hWP/1CpauHY=
 github.com/ybbus/jsonrpc/v2 v2.1.6 h1:++pboiaaD6TZ9FJ1JOBBRB/tPtR1njYzqz1iSZGv+3Y=
 github.com/ybbus/jsonrpc/v2 v2.1.6/go.mod h1:rIuG1+ORoiqocf9xs/v+ecaAVeo3zcZHQgInyKFMeg0=
+github.com/ybbus/jsonrpc/v2 v2.1.7 h1:QjoXuZhkXZ3oLBkrONBe2avzFkYeYLorpeA+d8175XQ=
+github.com/ybbus/jsonrpc/v2 v2.1.7/go.mod h1:rIuG1+ORoiqocf9xs/v+ecaAVeo3zcZHQgInyKFMeg0=
 golang.org/x/net v0.0.0-20180906233101-161cd47e91fd h1:nTDtHvHSdCn1m6ITfMRqtOd/9+7a3s8RBNOZ3eYZzJA=
 golang.org/x/net v0.0.0-20180906233101-161cd47e91fd/go.mod h1:mL1N/T3taQHkDXs73rZJwtUhF3w3ftmwwsq0BUmARs4=
 golang.org/x/sync v0.0.0-20180314180146-1d60e4601c6f/go.mod h1:RxMgew5VJxzue5/jJTE5uejpjVlOe/izrB70Jof72aM=
