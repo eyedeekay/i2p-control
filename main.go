@@ -3,10 +3,12 @@ package main
 import (
 	"flag"
 	"fmt"
-	"github.com/eyedeekay/go-i2pcontrol"
 	"log"
+	"strconv"
 	"strings"
 	"time"
+
+	"github.com/eyedeekay/go-i2pcontrol"
 )
 
 var usage = `i2p-control
@@ -60,11 +62,17 @@ var (
 	block    = flag.Bool("block", false, "Block the terminal until the router is completely shut down")
 )
 
+var args = flag.Args()
+
 func main() {
 	flag.Parse()
 	if *shelp || *lhelp {
 		fmt.Printf(usage)
 		return
+	}
+	if len(args) < 2 {
+		args = append(args, "bw.sendBps")
+		args = append(args, "300000")
 	}
 	shuttingdown := false
 	i2pcontrol.Initialize(*host, *port, *path)
@@ -168,6 +176,16 @@ func main() {
 		}
 	case "tunstat":
 		message, err := i2pcontrol.ParticipatingTunnels()
+		if err != nil {
+			log.Fatal(err)
+		}
+		log.Println(message)
+	case "ratestat":
+		args2, err := strconv.Atoi(args[1])
+		if err != nil {
+			log.Fatal(err, args2)
+		}
+		message, err := i2pcontrol.RateStat(args[0], args2)
 		if err != nil {
 			log.Fatal(err)
 		}
